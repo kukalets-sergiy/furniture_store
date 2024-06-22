@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayPal JS SDK Standard Integration</title>
+</head>
+<body>
+    <h3 class="text-center">Payment with PayPal</h3>
+    <div id="paypal-button-container"></div>
+    <p id="result-message"></p>
+
+    <!-- Initialize the JS-SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ATDcY_Wfm43R2rOQZeaoCU9l5hV6TT9LUMr9RCqlxdsKoj9xcHqIqgQZyOt2Klr1YOzLpwBUrocISuLO&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo"
+            data-sdk-integration-source="developer-studio"></script>
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '0.01' // Змініть на необхідну суму
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    document.getElementById('result-message').innerText = 'Transaction completed by ' + details.payer.name.given_name;
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>
+
+
